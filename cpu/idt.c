@@ -6,7 +6,6 @@
  *    The IDT is used by the processor to determine the correct response to interrupts and exceptions.
  */
 #include "idt.h"
-#include "../kernel/util.h"
 
 void set_idt_gate(int n, u32 handler) {
   idt[n].low_offset = low_16(handler);
