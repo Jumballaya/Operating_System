@@ -3,9 +3,14 @@
  */
 #include "../drivers/screen.h"
 #include "util.h"
+#include "../cpu/isr.h"
+#include "../cpu/idt.h"
 
-void main() {
-  clear_screen();
-  kprint("Welcome to the operating system\n");
+void _start() {
+  isr_install();
+
+  // Test interrupts
+  __asm__ __volatile__("int $2");
+  __asm__ __volatile__("int $3");
 }
 
