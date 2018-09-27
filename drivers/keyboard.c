@@ -1,7 +1,6 @@
 /**
  * Keyboard Driver
  */
-
 #include "keyboard.h"
 #include "../cpu/ports.h"
 #include "../cpu/isr.h"
@@ -9,6 +8,7 @@
 #include "../libc/string.h"
 #include "../libc/function.h"
 #include "../kernel/kernel.h"
+#include <stdint.h>
 
 #define SC_MAX 57
 #define BACKSPACE 0x0E
@@ -42,7 +42,7 @@ _Bool is_shift(char c) {
 
 static void keyboard_callback(registers_t regs) {
   /* The PIC leaves us the scancode in port 0x60 */
-  u8 scancode = port_byte_in(0x60);
+  uint8_t scancode = port_byte_in(0x60);
 
   if (scancode > SC_MAX) return;
   if (scancode == BACKSPACE) {

@@ -10,7 +10,7 @@
 
 static void io_callback(registers_t regs) {
   /* The PIC leaves us the scancode in port 0x60 */
-  u8 scancode = port_byte_in(0x60);
+  uint8_t scancode = port_byte_in(0x60);
 
   char out[10];
   int_to_ascii(scancode, out);
