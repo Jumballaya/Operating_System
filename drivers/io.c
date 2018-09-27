@@ -8,7 +8,7 @@
 #include "./screen.h"
 #include "../libc/function.h"
 
-static void io_callback(registers_t regs) {
+static void io_callback(registers_t *regs) {
   /* The PIC leaves us the scancode in port 0x60 */
   uint8_t scancode = port_byte_in(0x60);
 
