@@ -19,24 +19,31 @@ void kernel_main() {
     "Type 'end' to halt the CPU or 'page' to request a kmalloc()\n> ");
 }
 
+void request_page() {
+	uint32_t phys_addr;
+	uint32_t page = kmalloc(1000, 1, &phys_addr);
+	char page_str[16] = "";
+	hex_to_ascii(page, page_str);
+	char phys_str[16] = "";
+	hex_to_ascii(phys_addr, phys_str);
+	kprint("Page: ");
+	kprint(page_str);
+	kprint(", physical address: ");
+	kprint(phys_str);
+	kprint("\n");
+}
+
 void user_input(char *input) {
-  if (strcmp(input, "END") == 0) {
+  if (strcmp(input, "end") == 0) {
     kprint("Stopping the CPU. Bye!\n");
     asm volatile("hlt");
-  } else if (strcmp(input, "PAGE") == 0) {
-    /* Lesson 22: Code to test kmalloc, the rest is unchanged */
-    uint32_t phys_addr;
-    uint32_t page = kmalloc(1000, 1, &phys_addr);
-    char page_str[16] = "";
-    hex_to_ascii(page, page_str);
-    char phys_str[16] = "";
-    hex_to_ascii(phys_addr, phys_str);
-    kprint("Page: ");
-    kprint(page_str);
-    kprint(", physical address: ");
-    kprint(phys_str);
-    kprint("\n");
-  }
+  } else if (strcmp(input, "page") == 0) {
+		request_page();
+  } else if (strcmp(input, "clear") == 0) {
+		clear_screen();
+		kprint("\n> ");
+		return;
+	}
   kprint("You said: ");
   kprint(input);
   kprint("\n> ");
