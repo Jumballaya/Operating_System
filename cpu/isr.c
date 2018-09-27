@@ -7,6 +7,7 @@
 #include "idt.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/io.h"
 #include "../libc/string.h"
 #include "timer.h"
 #include "ports.h"
@@ -156,4 +157,7 @@ void irq_install() {
 
   // IRQ1 Keyboard
   init_keyboard();
+
+  // IRQ9-12 IO
+  init_io();
 }
