@@ -151,9 +151,9 @@ void irq_install() {
   // Enable interrupts
   asm volatile("sti");
 
-  // IRQ0 timer
+  // IRQ0 Timer
   init_timer(50);
 
-  // Keyboard
+  // IRQ1 Keyboard
   init_keyboard();
 }
