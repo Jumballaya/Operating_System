@@ -10,6 +10,7 @@ int print_char(char c, int col, int row, char attr);
 int get_offset(int col, int row);
 int get_offset_row(int offset);
 int get_offset_col(int offset);
+int scroll(int offset);
 
 /**********************************************************
  * Public Kernel API functions                            *
@@ -64,29 +65,31 @@ void clear_screen() {
 }
 
 void move_cursor(int direction) {
-  int cpos = get_cursor_offset();
+  int offset = get_cursor_offset();
+
   switch (direction) {
     // UP
     case 0:
-      set_cursor_offset(cpos - 160);
+      offset -= 160;
       break;
 
     // RIGHT
     case 1:
-      set_cursor_offset(cpos + 2);
+      offset += 2;
       break;
 
     // DOWN
     case 2:
-      set_cursor_offset(cpos + 160);
+      offset += 160;
       break;
 
     // LEFT
     case 3:
-      set_cursor_offset(cpos - 2);
+      offset -= 2;
       break;
-
   }
+
+  offset = scroll(offset);
 }
 
 /**********************************************************
@@ -129,6 +132,12 @@ int print_char(char c, int col, int row, char attr) {
     offset += 2;
   }
 
+  offset = scroll(offset);
+
+  return offset;
+}
+
+int scroll(int offset) {
   /* Check if the offset is over screen size and scroll */
   if (offset >= MAX_ROWS * MAX_COLS * 2) {
     int i;
@@ -143,6 +152,10 @@ int print_char(char c, int col, int row, char attr) {
     for (i = 0; i < MAX_COLS * 2; i++) last_line[i] = 0;
 
     offset -= 2 * MAX_COLS;
+  }
+
+  if (offset < 0) {
+    offset = 0;
   }
 
   set_cursor_offset(offset);
