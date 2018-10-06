@@ -51,6 +51,43 @@ void kprint_backspace() {
   print_char(0x08, col, row, WHITE_ON_BLACK);
 }
 
+void clear_screen() {
+  int screen_size = MAX_COLS * MAX_ROWS;
+  int i;
+  uint8_t *screen = (uint8_t*) VIDEO_ADDRESS;
+
+  for (i = 0; i < screen_size; i++) {
+    screen[i*2] = ' ';
+    screen[i*2+1] = WHITE_ON_BLACK;
+  }
+  set_cursor_offset(get_offset(0, 0));
+}
+
+void move_cursor(int direction) {
+  int cpos = get_cursor_offset();
+  switch (direction) {
+    // UP
+    case 0:
+      set_cursor_offset(cpos - 160);
+      break;
+
+    // RIGHT
+    case 1:
+      set_cursor_offset(cpos + 2);
+      break;
+
+    // DOWN
+    case 2:
+      set_cursor_offset(cpos + 160);
+      break;
+
+    // LEFT
+    case 3:
+      set_cursor_offset(cpos - 2);
+      break;
+
+  }
+}
 
 /**********************************************************
  * Private kernel functions                               *
@@ -132,19 +169,6 @@ void set_cursor_offset(int offset) {
   port_byte_out(REG_SCREEN_CTRL, 15);
   port_byte_out(REG_SCREEN_DATA, (uint8_t)(offset & 0xff));
 }
-
-void clear_screen() {
-  int screen_size = MAX_COLS * MAX_ROWS;
-  int i;
-  uint8_t *screen = (uint8_t*) VIDEO_ADDRESS;
-
-  for (i = 0; i < screen_size; i++) {
-    screen[i*2] = ' ';
-    screen[i*2+1] = WHITE_ON_BLACK;
-  }
-  set_cursor_offset(get_offset(0, 0));
-}
-
 
 int get_offset(int col, int row) { return 2 * (row * MAX_COLS + col); }
 int get_offset_row(int offset) { return offset / (2 * MAX_COLS); }

@@ -10,6 +10,11 @@
 #include "../kernel/kernel.h"
 #include <stdint.h>
 
+#define ARROW 224
+#define TOP 72
+#define RIGHT 77
+#define BOTTOM 80
+#define LEFT 75
 #define SC_MAX 57
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
@@ -43,6 +48,18 @@ _Bool is_shift(char c) {
 static void keyboard_callback(registers_t *regs) {
   /* The PIC leaves us the scancode in port 0x60 */
   uint8_t scancode = port_byte_in(0x60);
+
+  if (scancode == LEFT || scancode == RIGHT || scancode == TOP || scancode == BOTTOM) {
+    if (scancode == TOP) {
+      move_cursor(0);
+    } else if (scancode == RIGHT) {
+      move_cursor(1);
+    } else if (scancode == BOTTOM) {
+      move_cursor(2);
+    } else if (scancode == LEFT) {
+      move_cursor(3);
+    }
+  }
 
   if (scancode > SC_MAX) return;
   if (scancode == BACKSPACE) {
