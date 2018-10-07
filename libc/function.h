@@ -5,4 +5,6 @@
  * and this is a solution to avoid the 'unused parameter' compiler warning */
 #define UNUSED(x) (void)(x)
 
+void panic(char msg[]);
+
 #endif

@@ -3,6 +3,10 @@
  */
 #include "mem.h"
 
+// @TODO: compute at link time
+// For now we use the hardcoded value we defined in the Makefile
+uint32_t free_mem_addr = 0x10000;
+
 /**
  * memory_copy
  *
@@ -24,10 +28,6 @@ void memory_set(uint8_t *dest, uint8_t val, uint32_t len) {
   uint8_t *temp = (uint8_t *)dest;
   for ( ; len != 0; len--) *temp++ = val;
 }
-
-// @TODO: compute at link time
-// For now we use the hardcoded value we defined in the Makefile
-uint32_t free_mem_addr = 0x10000;
 
 /**
  * kmalloc
