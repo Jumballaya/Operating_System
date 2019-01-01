@@ -133,13 +133,13 @@ void free_frame(page_t *page, uint32_t* frames) {
 // @TODO: nframes, frames, kernel_directory and current_directory are global variables
 //        most likely shouldn't be (as this is the libc directory). I need to find a better
 //        place to put paging/frame/memory functions that ARE NOT part of the libc.
-void initialize_paging(uint32_t* nframes, uint32_t* frames, page_directory_t* kernel_directory, page_directory_t* current_directory) {
+void initialize_paging(uint32_t nframes, uint32_t* frames, page_directory_t* kernel_directory, page_directory_t* current_directory) {
   // Size of the physical memory.. for now we assume 16MB
   uint32_t mem_end_page = 0x1000000;
 
-  *nframes = mem_end_page / 0x1000;
-  frames = (uint32_t*)kmalloc(INDEX_FROM_BIT(*nframes), 0, 0);
-  memory_set(frames, 0, INDEX_FROM_BIT(*nframes));
+  nframes = mem_end_page / 0x1000;
+  frames = (uint32_t*) kmalloc(INDEX_FROM_BIT(nframes), 0, 0);
+  memory_set(frames, 0, INDEX_FROM_BIT(nframes));
 
   // Make a page directory
   kernel_directory = (page_directory_t*)kmalloc(sizeof(page_directory_t), 1, 0);
@@ -169,7 +169,7 @@ void initialize_paging(uint32_t* nframes, uint32_t* frames, page_directory_t* ke
 
 // Switch Page loads the specified page directory
 void switch_page_directory(page_directory_t *dir, page_directory_t* current_directory) {
-  current_directory = dir;
+  *current_directory = *dir;
   asm volatile("mov %0, %%cr3":: "r"(&dir->tablesPhysical));
   uint32_t cr0;
   asm volatile("mov %%cr0, %0": "=r"(cr0));

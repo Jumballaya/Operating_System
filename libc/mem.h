@@ -40,7 +40,7 @@ typedef struct page_directoy {
 } page_directory_t;
 
 // Initialize Paging
-void initialize_paging(uint32_t* nframes, uint32_t* frames, page_directory_t* kernel_directory, page_directory_t* current_directory);
+void initialize_paging(uint32_t nframes, uint32_t* frames, page_directory_t* kernel_directory, page_directory_t* current_directory);
 
 // Switch Page loads the specified page directory
 void switch_page_directory(page_directory_t *dir, page_directory_t *current_directory);
