@@ -3,6 +3,8 @@
 #include "../libc/mem.h"
 #include <stdint.h>
 
+#define LINE_LENGTH 80
+
 /* Declaration of private functions */
 int get_cursor_offset();
 void set_cursor_offset(int offset);
@@ -47,9 +49,13 @@ void kprint(char *message) {
 
 void kprint_backspace() {
   int offset = get_cursor_offset()-2;
+  int initOffset = get_cursor_offset();
+  int initRow = get_offset_row(initOffset);
   int row = get_offset_row(offset);
   int col = get_offset_col(offset);
-  print_char(0x08, col, row, WHITE_ON_BLACK);
+  if (row == initRow) {
+    print_char(0x08, col, row, WHITE_ON_BLACK);
+  }
 }
 
 void clear_screen() {
