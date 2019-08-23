@@ -6,14 +6,20 @@
 # $^ - All dependencies
 ####
 
+# Set up cross-compiler for i386
+ifeq ($(OS), Linux)
+	CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
+	GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
+else
+	CC = /usr/local/bin/i386-elf-gcc
+	GDB = /usr/local/bin/i386-elf-gdb
+endif
+
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
-# Change this if your cross-compiler is somewhere else
-CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
-GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
 # -g: Use debugging symbols in gcc
 CFLAGS = -g -ffreestanding -Wall -Wextra -fno-exceptions -m32
 
